@@ -10,7 +10,9 @@ MYSQL_CONFIG = {
     "port": int(os.getenv("MYSQL_PORT")),
     "user": os.getenv("MYSQL_USER"),
     "password": os.getenv("MYSQL_PASS"),
-    "database": os.getenv("MYSQL_DB")
+    "database": os.getenv("MYSQL_DB"),
+    "ssl_ca": "ca.pem"
+
 }
 
 def get_conn():
