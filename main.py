@@ -2,12 +2,16 @@ from fastmcp import FastMCP
 import os
 import sqlite3
 
-DB_PATH = os.path.join(os.path.dirname(__file__), "expenses.db")
+# Use FastMCP persistent storage
+DB_PATH = "/data/expenses.db"
+
+# categories.json can stay in your repo (read-only is fine)
 CATEGORIES_PATH = os.path.join(os.path.dirname(__file__), "categories.json")
 
 mcp = FastMCP("ExpenseTracker")
 
 def init_db():
+    # Create DB inside /data (writable)
     with sqlite3.connect(DB_PATH) as c:
         c.execute("""
             CREATE TABLE IF NOT EXISTS expenses(
@@ -73,13 +77,8 @@ def summarize(start_date, end_date, category=None):
 
 @mcp.resource("expense://categories", mime_type="application/json")
 def categories():
-    # Read fresh each time so you can edit the file without restarting
     with open(CATEGORIES_PATH, "r", encoding="utf-8") as f:
         return f.read()
 
-
-
 if __name__ == "__main__":
     mcp.run(transport="http", host="0.0.0.0", port=9000)
-
-
